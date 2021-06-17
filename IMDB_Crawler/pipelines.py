@@ -42,15 +42,12 @@ class ImdbCrawlerPipeline:
         placeHolders = ", ".join(["%s"] * len(data))
         columns = ", ".join(data.keys())
         try:
-            conn = pymysql.connect(host='localhost', user=self.USER, password=self.PASS, database='dummy_scrap')
-            cur = conn.cursor()
-
-            cur.execute(f"USE {self.DATABASE}")
+            self.cur.execute(f"USE {self.DATABASE}")
 
             insert_statement = f"INSERT INTO {self.TABLE} ({columns}) VALUES ({placeHolders})"
-            cur.execute(insert_statement, list(data.values()))
+            self.cur.execute(insert_statement, list(data.values()))
 
-            conn.commit()
+            self.conn.commit()
         except Exception as e:
             logging.error('Error occured when inserting data :', e)
         finally:
